@@ -24,6 +24,7 @@ namespace aspnetcoreapp.Pages.Movies
             return Page();
         }
 
+        // When the Create form posts the form values, the ASP.NET Core runtime binds the posted values to the Movie model.
         [BindProperty]
         public Movie Movie { get; set; }
 
