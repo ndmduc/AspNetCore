@@ -27,6 +27,13 @@ namespace TodoApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // config 4 Cors
+            services.AddCors(options => {
+                options.AddPolicy("MvcMovieCors", builder => {
+                                            builder.WithOrigins("*","*").AllowAnyHeader().AllowAnyMethod();
+                                        });
+            });
+
             services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -44,6 +51,14 @@ namespace TodoApi
                 app.UseHsts();
             }
 
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+            // app.UseCors("MvcMovieCors");
+            app.UseCors(builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials()); 
             app.UseHttpsRedirection();
             app.UseMvc();
         }
