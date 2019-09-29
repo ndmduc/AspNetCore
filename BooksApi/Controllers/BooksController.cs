@@ -32,7 +32,7 @@ namespace BooksApi.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Book> Create(Book book)
+        public ActionResult<Book> Create([FromBody]Book book)
         {
             _bookServices.Create(book);
 
@@ -53,7 +53,7 @@ namespace BooksApi.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id:length(24)}")]
+        [HttpDelete("{id:string}")]
         public IActionResult Delete(string id)
         {
             var book = _bookServices.Get(id);
