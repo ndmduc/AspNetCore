@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SportStore.Models;
+using SportStore.Models.ViewModels;
 
 namespace SportStore.Controllers
 {
@@ -25,12 +26,27 @@ namespace SportStore.Controllers
             repository = repo;
         }
 
-        public IActionResult Index(int pageNumber = 1)
+        public IActionResult Index(string category, int pageNumber = 1)
         {
-            return View(repository.Products
-                .OrderBy(p => p.ProductID)
-                .Skip((pageNumber -1) * PageSize)
-                .Take(PageSize));
+            //return View(repository.Products
+            //    .OrderBy(p => p.ProductID)
+            //    .Skip((pageNumber -1) * PageSize)
+            //    .Take(PageSize));
+            return View(new ProductsListViewModel
+            {
+                Products = repository.Products
+                    .Where(p => p.Category == category || category == null)
+                    .OrderBy(p => p.ProductID)
+                    .Skip((pageNumber - 1) * PageSize)
+                    .Take(PageSize),
+                PagingInfo = new PagingInfo
+                {
+                    CurrentPage = pageNumber,
+                    ItemsPerPage = PageSize,
+                    TotalItems = repository.Products.Count()
+                },
+                CurrentCategory = category
+            }); 
         }
 
         public IActionResult Privacy()
